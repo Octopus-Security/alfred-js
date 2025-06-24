@@ -1,0 +1,470 @@
+{
+    "1": {
+        "nameOld": "theFool",
+        "name": "The Fool",
+        "description": "new beginnings, innocence, free-spirit, originality, freedom",
+        "reversed_description": "pushing past limits, foolish decisions, recklessness"
+    },
+    "2": {
+        "nameOld": "theMagician",
+        "name": "The Magician",
+        "description": "creativity, manifestation, resources, power, skill",
+        "reversed_description": "trickery, greediness, manipulation, wasted potential, untapped talents"
+    },
+    "3": {
+        "nameOld": "theHighPriestess",
+        "name": "The High Priestess",
+        "description": "intuition, mystery, spirituality, inner voice",
+        "reversed_description": "blocked intuition, broken communication, secrets, withdrawal, cognitive dissonance"
+    },
+    "4": {
+        "nameOld": "theEmpress",
+        "name": "The Empress",
+        "description": "femininity, nature and nurture, abundance, fertility, beauty",
+        "reversed_description": "disconnection, disharmony, insecurity, look inward, dependence"
+    },
+    "5": {
+        "nameOld": "theEmperor",
+        "name": "The Emperor",
+        "description": "masculinity, authority, fairness, protection, structure",
+        "reversed_description": "arrogance, overconfidence, stubborn, controlling"
+    },
+    "6": {
+        "nameOld": "theHeirophant",
+        "name": "The Hierophant",
+        "description": "education, institutions, religion, spiritual wisdom, tradition",
+        "reversed_description": "restricted thinking, lack of creativity, rebellion, freedom, personal beliefs"
+    },
+    "7": {
+        "nameOld": "theLovers",
+        "name": "The Lovers",
+        "description": "unity, love, soulmates, union, duality",
+        "reversed_description": "disharmony, imbalance in relationships, self-love, conflict, disconnection"
+    },
+    "8": {
+        "nameOld": "theChariot",
+        "name": "The Chariot",
+        "description": "willpower, drive, control, victory, focus",
+        "reversed_description": "lack of control, self-discipline, opposition, lack of direction, forcefulness"
+    },
+    "9": {
+        "nameOld": "strength",
+        "name": "Strength",
+        "description": "strength, courage, influence, compassion, bravery",
+        "reversed_description": "lack of emotional control, self-doubt, low self-esteem, vulnerability, cowardice"
+    },
+    "10": {
+        "nameOld": "theHermit",
+        "name": "The Hermit",
+        "description": "alone time, solitude, wisdom, enlightenment, meditation",
+        "reversed_description": "isolation, escaping thoughts, loneliness, rejection"
+    },
+    "11": {
+        "nameOld": "theWheelOfFortune",
+        "name": "The Wheel of Fortune",
+        "description": "fate, cycles, good luck, karma, destiny",
+        "reversed_description": "upcoming hardship, resistance to change, breaking cycles, lack of control"
+    },
+    "12": {
+        "nameOld": "justice",
+        "name": "Justice",
+        "description": "justice, law, fairness, cause and effect, truth",
+        "reversed_description": "dishonesty, injustice, unfairness, retribution"
+    },
+    "13": {
+        "nameOld": "theHangedMan",
+        "name": "The Hanged Man",
+        "description": "sacrifice, waiting, release, trapped, uncertainty",
+        "reversed_description": "delays, lack of faith, resistance, stalling, apathy"
+    },
+    "14": {
+        "nameOld": "death",
+        "name": "Death",
+        "description": "transformation, endings, change, transition, release",
+        "reversed_description": "resisting change, purging, holding onto negative patterns, stagnancy"
+    },
+    "15": {
+        "nameOld": "temperance",
+        "name": "Temperance",
+        "description": "balance, moderation, patience, inner calm",
+        "reversed_description": "imbalance, excess, self-healing, recklessness"
+    },
+    "16": {
+        "nameOld": "theDevil",
+        "name": "The Devil",
+        "description": "addiction, restriction, temptation, violence, mental illness",
+        "reversed_description": "release, freedom, independence, exploring dark thoughts, regaining control"
+    },
+    "17": {
+        "nameOld": "theTower",
+        "name": "The Tower",
+        "description": "sudden change, chaos, awakening, upheaval, destruction",
+        "reversed_description": "averting disaster, delaying the inevitable, resisting change, personal transformation"
+    },
+    "18": {
+        "nameOld": "theStar",
+        "name": "The Star",
+        "description": "hope, faith, renewal, wishes, healing",
+        "reversed_description": "despair, lack of motivation, hopelessness, disconnection, self-trust"
+    },
+    "19": {
+        "nameOld": "theMoon",
+        "name": "The Moon",
+        "description": "shadow self, subconscious, illusion, intuition, dreams",
+        "reversed_description": "release of fear, repressed emotion, truth, inner confusion"
+    },
+    "20": {
+        "nameOld": "theSun",
+        "name": "The Sun",
+        "description": "positivity, good fortunes, happiness, confidence, vitality",
+        "reversed_description": "pessimism, inner child, overly optimistic, unrealistic expectations, conceit"
+    },
+    "21": {
+        "nameOld": "judgement",
+        "name": "Judgment",
+        "description": "transition, rebirth, judgment, evaluation, awakening",
+        "reversed_description": "self-doubt, over-judgment, ignoring your calling, indecisiveness, lack of self-awareness"
+    },
+    "22": {
+        "nameOld": "theWorld",
+        "name": "The World",
+        "description": "completion, end of journey, wholeness, travel, accomplishment",
+        "reversed_description": "emptiness, personal closure, delays, incompletion"
+    },
+    "23": {
+        "nameOld": "swordsAce",
+        "name": "Ace of Swords",
+        "description": "mental and physical strength, breakthroughs, clarity, problem solving, vision",
+        "reversed_description": "hard time completing projects, clouded judgment, rethinking, miscommunication"
+    },
+    "24": {
+        "nameOld": "swords2",
+        "name": "Two of Swords",
+        "description": "indecision, avoidance, blindness, stalemate",
+        "reversed_description": "lack of clarity, truth, confusion, information overload, anxiety"
+    },
+    "25": {
+        "nameOld": "swords3",
+        "name": "Three of Swords",
+        "description": "heartbreak, loss, grief, separation, sadness",
+        "reversed_description": "trouble letting go, releasing pain, forgiveness, overcoming, reconciliation"
+    },
+    "26": {
+        "nameOld": "swords4",
+        "name": "Four of Swords",
+        "description": "inner calm, rest, relaxation, meditation, recuperation",
+        "reversed_description": "distractions, exhaustion, burn out, recovery, restlessness"
+    },
+    "27": {
+        "nameOld": "swords5",
+        "name": "Five of Swords",
+        "description": "cost, “battle won but what for?”, conflict, defeat",
+        "reversed_description": "“pick your battles”, resolution, making amends, past resentment, compromise"
+    },
+    "28": {
+        "nameOld": "swords6",
+        "name": "Six of Swords",
+        "description": "sacrifice, starting over, moving forward, healing, transition",
+        "reversed_description": "resistance to change, stuck in the past, trapped"
+    },
+    "29": {
+        "nameOld": "swords7",
+        "name": "Seven of Swords",
+        "description": "cunning, deception, stealth, strategy, scheming",
+        "reversed_description": "over burdened, secrets, imposter syndrome, confession, self-deceit"
+    },
+    "30": {
+        "nameOld": "swords8",
+        "name": "Eight of Swords",
+        "description": "powerless, imprisonment, victim mentality, limiting self-beliefs, negative thoughts",
+        "reversed_description": "freedom, release, inner critic, taking control, end of punishment"
+    },
+    "31": {
+        "nameOld": "swords9",
+        "name": "Nine of Swords",
+        "description": "nightmares, anxiety, fear, breaking point, isolation",
+        "reversed_description": "worrying over nothing, coping, recovery, inner turmoil"
+    },
+    "32": {
+        "nameOld": "swords10",
+        "name": "Ten of Swords",
+        "description": "painful endings, defeated, betrayal, failure, collapse",
+        "reversed_description": "negative mindset, regeneration, survival, resisting endings, relapse"
+    },
+    "33": {
+        "nameOld": "swordsPage",
+        "name": "Page of Swords",
+        "description": "strength, stamina, taking action, curiosity, new ideas",
+        "reversed_description": "all talk vs no action, cynical, haste, self-expression, scatterbrained"
+    },
+    "34": {
+        "nameOld": "swordsKnight",
+        "name": "Knight of Swords",
+        "description": "enthusiasm, charging ahead, carpe diem, ambition, fast action/thinking",
+        "reversed_description": "scattered projects, unfocused, impulsive, burn out, rudeness"
+    },
+    "35": {
+        "nameOld": "swordsQueen",
+        "name": "Queen of Swords",
+        "description": "confidence, independence, big picture, direct communication, boundaries",
+        "reversed_description": "cold-hearted, overly emotional, bitter, cruel, easily influenced"
+    },
+    "36": {
+        "nameOld": "swordsKing",
+        "name": "King of Swords",
+        "description": "strategic, logical, methodical, authority, intellectual power",
+        "reversed_description": "aggression, greed, misuse of power, irrational, quiet power"
+    },
+    "37": {
+        "nameOld": "cupsAce",
+        "name": "Ace of Cups",
+        "description": "purity, beginnings, new relationships, creativity, love",
+        "reversed_description": "self-love, intuition, emptiness, repression, infertility"
+    },
+    "38": {
+        "nameOld": "cups2",
+        "name": "Two of Cups",
+        "description": "negotiation, partnership, balance, karmic connection",
+        "reversed_description": "power imbalance, challenging relationships, self-love, distrust, bad communication"
+    },
+    "39": {
+        "nameOld": "cups3",
+        "name": "Three of Cups",
+        "description": "reunions, friendship, celebrations, community",
+        "reversed_description": "not being heard, independence, excessive partying, gossip, cheating"
+    },
+    "40": {
+        "nameOld": "cups4",
+        "name": "Four of Cups",
+        "description": "detached, unmotivated, depression, contemplation, indifference",
+        "reversed_description": "hard work paying off, end of hardship, withdrawal, awareness"
+    },
+    "41": {
+        "nameOld": "cups5",
+        "name": "Five of Cups",
+        "description": "moving forward, lessons learned, self-forgiveness, peace, acceptance",
+        "reversed_description": "despair, regret, disappointment, scarcity mindset, mourning"
+    },
+    "42": {
+        "nameOld": "cups6",
+        "name": "Six of Cups",
+        "description": "familiarity, childhood, memories, the past",
+        "reversed_description": "clinging to the past, lacking humor/playfulness, independence, moving forward, forgiveness"
+    },
+    "43": {
+        "nameOld": "cups7",
+        "name": "Seven of Cups",
+        "description": "dreams, choices, indecision, wishful thinking, illusion",
+        "reversed_description": "avoiding reality, overwhelming choices, alignment, confusion"
+    },
+    "44": {
+        "nameOld": "cups8",
+        "name": "Eight of Cups",
+        "description": "leaving behind, embracing shadow self, abandonment, escapism, withdrawal",
+        "reversed_description": "fear of losing out, aimless drifting, walking away, settling, one more chance"
+    },
+    "45": {
+        "nameOld": "cups9",
+        "name": "Nine of Cups",
+        "description": "fulfillment, gratitude, wishes coming true, satisfaction, contentment",
+        "reversed_description": "entitlement, materialism, inner happiness, dissatisfaction, indulgence"
+    },
+    "46": {
+        "nameOld": "cups10",
+        "name": "Ten of Cups",
+        "description": "peace, contentment, fulfillment, security, harmony",
+        "reversed_description": "disconnection, struggling relationships, neglect, abuse"
+    },
+    "47": {
+        "nameOld": "cupsPage",
+        "name": "Page of Cups",
+        "description": "inspiration, inner child, innocence, curiosity, possibility",
+        "reversed_description": "immaturity, substance abuse, unrealistic expectations, doubting intuition, vulnerability"
+    },
+    "48": {
+        "nameOld": "cupsKnight",
+        "name": "Knight of Cups",
+        "description": "romance, calm, creativity, daydreamer, charm",
+        "reversed_description": "lack of information, mundane, unrealistic, jealousy, moody"
+    },
+    "49": {
+        "nameOld": "cupsQueen",
+        "name": "Queen of Cups",
+        "description": "subconscious, intuition, compassion, healer",
+        "reversed_description": "trapped by feelings, disconnection, co-dependence, immature"
+    },
+    "50": {
+        "nameOld": "cupsKing",
+        "name": "King of Cups",
+        "description": "control of emotions, grace, diplomatic, wisdom, compassion",
+        "reversed_description": "emotional vampire, manipulation, overwhelmed, self-compassion"
+    },
+    "51": {
+        "nameOld": "coinsAce",
+        "name": "Ace of Coins",
+        "description": "clarity, manifestation, financial security, new opportunities, prosperity",
+        "reversed_description": "lost opportunity, setbacks, poor finances, lack of planning, stinginess"
+    },
+    "52": {
+        "nameOld": "coins2",
+        "name": "Two of Coins",
+        "description": "possibility, balance, prioritization, time management, adaption",
+        "reversed_description": "loss of focus, over-committed, disorganization, imbalance"
+    },
+    "53": {
+        "nameOld": "coins3",
+        "name": "Three of Coins",
+        "description": "teamwork, common goals, group effort, apprenticeship, learning",
+        "reversed_description": "egotism, no cooperation, working alone, poor work ethic, apathy"
+    },
+    "54": {
+        "nameOld": "coins4",
+        "name": "Four of Coins",
+        "description": "fear of loss, saving money, scarcity, possessiveness",
+        "reversed_description": "fear of poverty, overspending, greed vs generosity, giving"
+    },
+    "55": {
+        "nameOld": "coins5",
+        "name": "Five of Coins",
+        "description": "financial loss, hardship, isolation vs community, worry, lack mindset",
+        "reversed_description": "struggles ending, gratitude, forgiveness, positive change, welcoming"
+    },
+    "56": {
+        "nameOld": "coins6",
+        "name": "Six of Coins",
+        "description": "generosity, charity, giving, receiving, support",
+        "reversed_description": "self-care, abuse of generosity, power dynamics, one-sided charity"
+    },
+    "57": {
+        "nameOld": "coins7",
+        "name": "Seven of Coins",
+        "description": "long-term investment, sustainable results, perseverance, hard work paying off, rewards",
+        "reversed_description": "unexpected results, limited success, unfinished business, procrastination"
+    },
+    "58": {
+        "nameOld": "coins8",
+        "name": "Eight of Coins",
+        "description": "education, furthering skills, diligent worker, apprenticeship, mastery",
+        "reversed_description": "perfectionism, laziness, self-development, dead-end job"
+    },
+    "59": {
+        "nameOld": "coins9",
+        "name": "Nine of Coins",
+        "description": "harmony with nature, abundance, wealth, self-sufficiency, luxury",
+        "reversed_description": "financial loss, self-worth, overworking, hustle"
+    },
+    "60": {
+        "nameOld": "coins10",
+        "name": "Ten of Coins",
+        "description": "security, protection, inheritance, long-term success, legacy",
+        "reversed_description": "financial loss, darkside of wealth and fame, debt, family disputes"
+    },
+    "61": {
+        "nameOld": "coinsPage",
+        "name": "Page of Coins",
+        "description": "manifestation, looking forward, skill development, diligence, student",
+        "reversed_description": "mental block, lack of progress, underachiever, learning from failure, lost opportunity"
+    },
+    "62": {
+        "nameOld": "coinsKnight",
+        "name": "Knight of Coins",
+        "description": "hard work, efficiency, reliability, routine, conservative",
+        "reversed_description": "bored, stuck in life, perfectionism, self-discipline, irresponsible"
+    },
+    "63": {
+        "nameOld": "coinsQueen",
+        "name": "Queen of Coins",
+        "description": "mother, comfort, security, practical, nurture",
+        "reversed_description": "smothering, controlling, self-care, financial independence, jealousy"
+    },
+    "64": {
+        "nameOld": "coinsKing",
+        "name": "King of Coins",
+        "description": "business person, success, abundance, wealth, discipline",
+        "reversed_description": "over-extravagant, too much focus on wealth, stubborn, financial instability"
+    },
+    "65": {
+        "nameOld": "wandsAce",
+        "name": "Ace of Wands",
+        "description": "new beginnings, potential, inspiration, creative spark, opportunity",
+        "reversed_description": "roadblocks, distractions, lack of passion, creative blocks, delays"
+    },
+    "66": {
+        "nameOld": "wands2",
+        "name": "Two of Wands",
+        "description": "balance, travel, life-changing decisions, planning, discovery",
+        "reversed_description": "personal goals, avoiding risk, fear of unknown, bad planning"
+    },
+    "67": {
+        "nameOld": "wands3",
+        "name": "Three of Wands",
+        "description": "exploration, travel, beginnings, growth, foresight",
+        "reversed_description": "setbacks, delays, limitations, returning home, holding onto the past"
+    },
+    "68": {
+        "nameOld": "wands4",
+        "name": "Four of Wands",
+        "description": "peace, upcoming celebrations, returning home, joy",
+        "reversed_description": "instability, feeling unwelcome, transition, personal celebration, home conflict"
+    },
+    "69": {
+        "nameOld": "wands5",
+        "name": "Five of Wands",
+        "description": "diversity, conflict, debate, tension, competition",
+        "reversed_description": "avoiding conflict, inner conflict, release of tension, cooperation, end of conflict"
+    },
+    "70": {
+        "nameOld": "wands6",
+        "name": "Six of Wands",
+        "description": "victory, respect, admiration, progress, self-confidence",
+        "reversed_description": "unsuccessful, risk of reputation, private achievements, egotism, disgrace"
+    },
+    "71": {
+        "nameOld": "wands7",
+        "name": "Seven of Wands",
+        "description": "defending oneself, “won’t be easy at the top”, protection, challenge",
+        "reversed_description": "lost confidence, giving up, exhaustion, surrender"
+    },
+    "72": {
+        "nameOld": "wands8",
+        "name": "Eight of Wands",
+        "description": "flight and travel, movement, action, jumping forward",
+        "reversed_description": "obstacles, resisting change, slow moving projects, unprepared"
+    },
+    "73": {
+        "nameOld": "wands9",
+        "name": "Nine of Wands",
+        "description": "resilience, courage, persistence, last obstacle, boundaries",
+        "reversed_description": "stubbornness, inner resources, inner struggle, paranoia, defensive"
+    },
+    "74": {
+        "nameOld": "wands10",
+        "name": "Ten of Wands",
+        "description": "overburdened, stress, hard work, extra responsibility",
+        "reversed_description": "procrastination, breakdown, doing it all, delegation"
+    },
+    "75": {
+        "nameOld": "wandsPage",
+        "name": "Page of Wands",
+        "description": "good news, ideas, free-spirited, adventure, discovery",
+        "reversed_description": "complications, aggression, unreliability, self-limiting beliefs, redirecting energy"
+    },
+    "76": {
+        "nameOld": "wandsKnight",
+        "name": "Knight of Wands",
+        "description": "energy, passion, action, taking risks, rebellion",
+        "reversed_description": "haste, arrogance, extreme impulsiveness, impatience, canceled travel"
+    },
+    "77": {
+        "nameOld": "wandsQueen",
+        "name": "Queen of Wands",
+        "description": "determination, dominance, courage, self-assured, social",
+        "reversed_description": "lack of confidence, self-respect, introverted, vengeful, demanding"
+    },
+    "78": {
+        "nameOld": "wandsKing",
+        "name": "King of Wands",
+        "description": "charisma, leader, big picture, entrepreneur, boldness",
+        "reversed_description": "ruthlessness, vicious, weak leader, powerlessness"
+    }
+}
