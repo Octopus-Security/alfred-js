@@ -16,7 +16,7 @@ module.exports = {
         )
         .addIntegerOption(option =>
             option.setName('deck')
-                .setDescription('The tarot deck to use (1 or 2).')
+                .setDescription('The tarot deck to use (1, 2, or 3).')
                 .setRequired(false)
                 .setMinValue(1)
                 .setMaxValue(2)
