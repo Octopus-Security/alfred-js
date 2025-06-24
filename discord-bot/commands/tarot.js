@@ -19,7 +19,7 @@ module.exports = {
                 .setDescription('The tarot deck to use (1, 2, or 3).')
                 .setRequired(false)
                 .setMinValue(1)
-                .setMaxValue(2)
+                .setMaxValue(3)
         ),
     async execute(interaction) {
         const numCards = interaction.options.getInteger('count');
