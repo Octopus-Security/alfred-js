@@ -1,1 +1,18 @@
 discord-bot/config.json
+# Dependencies - The most important line!
+/node_modules
+
+# Secrets & Data - Never commit secrets or live data
+.env
+*.db
+config.json
+
+# Log files
+*.log
+npm-debug.log*
+yarn-error.log
+yarn-debug.log*
+
+# OS-specific files to ignore
+.DS_Store
+Thumbs.db
