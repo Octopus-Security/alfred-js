@@ -1,21 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
-const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('../balances.db', (err) => {
-    if (err) {
-        console.error("Error opening database:", err);
-    } else {
-        db.run(`CREATE TABLE IF NOT EXISTS balances (
-            user_id TEXT PRIMARY KEY,
-            balance INTEGER DEFAULT 0
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating table:", err);
-            }
-        });
-    }
-});
-
+const { open } = require('sqlite');
+const sqlite3 = require('sqlite3');
+const path = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,45 +13,46 @@ module.exports = {
                 .setRequired(true))
         .addIntegerOption(option =>
             option.setName('amount')
-                .setDescription('The amount of chips to adjust (positive for add, negative for remove).')
+                .setDescription('The amount of chips to adjust (positive to add, negative to remove).')
                 .setRequired(true)),
 
     async execute(interaction) {
-        if (interaction.user.id !== '696202676966391888') { // User ID replaced
-            return interaction.reply("You do not have permission to use this command.");
+        if (interaction.user.id !== '696202676966391888') { // Your Admin User ID
+            return interaction.reply({ content: "You do not have permission to use this command.", ephemeral: true });
         }
+        
+        await interaction.deferReply();
 
         const targetUser = interaction.options.getUser('user');
         const amount = interaction.options.getInteger('amount');
-        const targetUserId = targetUser.id;
-
-        db.get("SELECT balance FROM balances WHERE user_id = ?", [targetUserId], (err, row) => {
-            if (err) {
-                console.error("Error checking balance:", err);
-                return interaction.reply("There was an error processing the transaction. Please try again later.");
-            }
-
-            if (!row) { // New user
-                db.run("INSERT INTO balances (user_id) VALUES (?)", [targetUserId]);
-            }
-
-            db.run("UPDATE balances SET balance = balance + ? WHERE user_id = ?", [amount, targetUserId], (err) => {
-                if (err) {
-                    console.error("Error adjusting chips:", err);
-                    return interaction.reply("There was an error adjusting chips. Please try again later.");
-                }
-
-                db.get("SELECT balance FROM balances WHERE user_id = ?", [targetUserId], (err, updatedRow) => {
-                    if (err) {
-                        console.error("Error getting updated balance:", err);
-                        return interaction.reply("There was an error getting the updated balance.");
-                    }
-
-                    const newBalance = updatedRow ? updatedRow.balance : 0;
-
-                    interaction.reply(`${targetUser} now has ${newBalance} chips.`);
-                });
+        const userId = targetUser.id;
+        
+        let db;
+        try {
+            db = await open({
+                filename: path.join(__dirname, '../balances.db'),
+                driver: sqlite3.Database
             });
-        });
+
+            // Get user, or create if they don't exist
+            let user = await db.get('SELECT * FROM users WHERE user_id = ?', [userId]);
+            if (!user) {
+                await db.run('INSERT INTO users (user_id, chip_balance) VALUES (?, ?)', [userId, 0]);
+            }
+
+            // Adjust the chip balance
+            await db.run('UPDATE users SET chip_balance = chip_balance + ? WHERE user_id = ?', [amount, userId]);
+
+            // Get the final, updated balance to show in the reply
+            const updatedUser = await db.get('SELECT chip_balance FROM users WHERE user_id = ?', [userId]);
+
+            await interaction.editReply(`Successfully adjusted chips for ${targetUser}. Their new chip balance is **${updatedUser.chip_balance}**.`);
+
+        } catch (error) {
+            console.error("Error in /adjustchips:", error);
+            await interaction.editReply({ content: 'An error occurred.', ephemeral: true });
+        } finally {
+            if (db) await db.close();
+        }
     },
 };

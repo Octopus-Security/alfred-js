@@ -1,35 +1,49 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
-const sqlite3 = require('sqlite3').verbose();
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { open } = require('sqlite');
+const sqlite3 = require('sqlite3');
+const path = require('path');
 
-// Database connection
-const db = new sqlite3.Database('balances.db', (err) => {
-    if (err) {
-        console.error("Error opening database:", err);
-    } else {
-        db.run(`CREATE TABLE IF NOT EXISTS balances (
-            user_id TEXT PRIMARY KEY,
-            balance INTEGER DEFAULT 0
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating table:", err);
-            }
-        });
+// --- Helper Functions for Blackjack Logic ---
+
+// Creates a standard 52-card deck
+const createDeck = () => {
+    const suits = ['♠️', '♥️', '♦️', '♣️'];
+    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const deck = [];
+    for (const suit of suits) {
+        for (const rank of ranks) {
+            let value = parseInt(rank);
+            if (['J', 'Q', 'K'].includes(rank)) value = 10;
+            if (rank === 'A') value = 11;
+            deck.push({ rank, suit, value });
+        }
     }
-});
-
-// In-memory game state storage (FOR TESTING ONLY - use a database for production)
-const gameStates = {};
-
-// Define functions GLOBALLY:
-const dealCard = () => Math.floor(Math.random() * 13) + 1;
-const calculateTotal = (hand) => hand.reduce((a, b) => a + Math.min(b, 10), 0);
-const createEmbed = (message, gameState) => {
-    const { playerHand, dealerHand, playerTotal, dealerTotal, gameOver, winAmount, bet } = gameState;
-    return new EmbedBuilder()
-        .setTitle('Blackjack Game')
-        .setDescription(`${message}\nYour hand: ${playerHand.join(', ')} (Total: ${playerTotal})\nDealer's hand: ${dealerHand.join(', ')} (Total: ${dealerTotal})`)
-        .setColor(gameOver ? (winAmount > 0 ? 0x00FF00 : winAmount < 0 ? 0xFF0000 : 0xFFFF00) : 0x0000FF);
+    return deck;
 };
+
+// Shuffles the deck (Fisher-Yates shuffle)
+const shuffleDeck = (deck) => {
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    return deck;
+};
+
+// Calculates hand value, properly handling Aces
+const calculateHandValue = (hand) => {
+    let value = hand.reduce((sum, card) => sum + card.value, 0);
+    let aceCount = hand.filter(card => card.rank === 'A').length;
+    while (value > 21 && aceCount > 0) {
+        value -= 10;
+        aceCount--;
+    }
+    return value;
+};
+
+// Creates a string representation of a hand
+const getHandString = (hand) => hand.map(card => `${card.rank}${card.suit}`).join(' ');
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,219 +52,162 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('play')
-                .setDescription('Start a new game of blackjack!')
-                .addIntegerOption(option => option.setName('bet').setDescription('The amount of money you want to bet').setRequired(true)))
+                .setDescription('Start a new game of blackjack.')
+                .addIntegerOption(option => option.setName('bet').setDescription('The amount of chips to bet.').setRequired(true).setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hit')
-                .setDescription('Hit another card'))
+                .setDescription('Take another card.'))
         .addSubcommand(subcommand =>
             subcommand
-                .setName('stay')
-                .setDescription('Stand and let the dealer play')),
+                .setName('stand')
+                .setDescription('Stand with your current hand.')),
+
     async execute(interaction) {
+        await interaction.deferReply();
         const subcommand = interaction.options.getSubcommand();
+        const userId = interaction.user.id;
 
-        if (subcommand === 'play') {
-            const bet = interaction.options.getInteger('bet');
-            const userId = interaction.user.id;
-
-            db.get("SELECT balance FROM balances WHERE user_id = ?", [userId], async (err, row) => {
-                if (err) {
-                    console.error("Error checking balance:", err);
-                    return interaction.reply({ content: 'A database error occurred.', ephemeral: true });
-                }
-
-                if (!row) {
-                    return interaction.reply({ content: 'You do not have an account. Use /register to create one.', ephemeral: true });
-                }
-
-                const balance = row.balance;
-
-                if (balance < bet) {
-                    return interaction.reply({ content: 'You do not have enough money to place that bet.', ephemeral: true });
-                }
-
-                if (bet <= 0) {
-                    return interaction.reply({ content: 'Bet must be a positive number.', ephemeral: true });
-                }
-
-                let playerHand = [];
-                let dealerHand = [];
-                let gameOver = false;
-                let winAmount = 0;
-
-                playerHand.push(dealCard());
-                dealerHand.push(dealCard());
-                playerHand.push(dealCard());
-                dealerHand.push(dealCard());
-
-                let playerTotal = calculateTotal(playerHand);
-                let dealerTotal = calculateTotal(dealerHand);
-
-                gameStates[interaction.user.id] = { playerHand, dealerHand, playerTotal, dealerTotal, gameOver, winAmount, bet };
-
-                await interaction.reply({ embeds: [createEmbed("Your turn!", gameStates[interaction.user.id])] });
+        let db;
+        try {
+            db = await open({
+                filename: path.join(__dirname, '../balances.db'),
+                driver: sqlite3.Database
             });
-        } else if (subcommand === 'hit') {
-            const gameState = gameStates[interaction.user.id];
-            if (!gameState || gameState.gameOver) {
-                return interaction.reply({ content: "No game in progress or game over!", ephemeral: true });
+
+            // Get user data
+            let user = await db.get('SELECT * FROM users WHERE user_id = ?', [userId]);
+            if (!user) {
+                return interaction.editReply({ content: 'You do not have an account yet. Use a command like `/portfolio` to get started.', ephemeral: true });
             }
+            let gameState = user.blackjack_game ? JSON.parse(user.blackjack_game) : null;
 
-            let { playerHand, dealerHand, playerTotal, dealerTotal, gameOver, winAmount, bet } = gameState;
+            // --- Subcommand Router ---
+            if (subcommand === 'play') {
+                const betAmount = interaction.options.getInteger('bet');
 
-            const playRound = () => {
-                let playerTotal = calculateTotal(playerHand);
-                let dealerTotal = calculateTotal(dealerHand);
+                if (gameState) {
+                    return interaction.editReply({ content: 'You already have a game in progress! Use `/blackjack hit` or `/blackjack stand`.', ephemeral: true });
+                }
+                if (user.chip_balance < betAmount) {
+                    return interaction.editReply({ content: `You don't have enough chips. Your balance is ${user.chip_balance}.`, ephemeral: true });
+                }
 
-                if (playerTotal > 21) {
-                    gameOver = true;
-                    resultMessage = "You busted! Dealer wins.";
-                    winAmount = -bet;
-                } else if (dealerTotal > 21) {
-                    gameOver = true;
-                    resultMessage = "Dealer busted! You win!";
-                    winAmount = bet;
-                } else if (gameOver) {
-                    if (playerTotal > dealerTotal) {
-                        resultMessage = "You win!";
-                        winAmount = bet;
-                    } else if (playerTotal < dealerTotal) {
-                        resultMessage = "Dealer wins!";
-                        winAmount = -bet;
+                // Start Game Logic
+                const deck = shuffleDeck(createDeck());
+                const playerHand = [deck.pop(), deck.pop()];
+                const dealerHand = [deck.pop(), deck.pop()];
+                
+                const newGameState = {
+                    deck,
+                    playerHand,
+                    dealerHand,
+                    bet: betAmount
+                };
+
+                // Deduct bet and save game state
+                await db.run('UPDATE users SET chip_balance = chip_balance - ?, blackjack_game = ? WHERE user_id = ?', [betAmount, JSON.stringify(newGameState), userId]);
+                
+                const playerValue = calculateHandValue(playerHand);
+                const embed = new EmbedBuilder()
+                    .setColor(0x0099FF)
+                    .setTitle(`Blackjack Game - Bet: ${betAmount} chips`)
+                    .setDescription('You were dealt your hand. Use `/blackjack hit` or `/blackjack stand`.')
+                    .addFields(
+                        { name: 'Your Hand', value: `${getHandString(playerHand)} (Value: ${playerValue})`, inline: true },
+                        { name: 'Dealer\'s Hand', value: `${getHandString([dealerHand[0]])} (Showing)`, inline: true }
+                    );
+                
+                // Handle instant blackjack
+                if (playerValue === 21) {
+                    const dealerValue = calculateHandValue(dealerHand);
+                    const blackjackPayout = Math.floor(betAmount * 1.5); // 3:2 payout
+                    const resultMessage = dealerValue === 21 ? 'Push! You and the dealer both have Blackjack.' : `Blackjack! You win ${blackjackPayout} chips!`;
+                    const balanceChange = dealerValue === 21 ? betAmount : betAmount + blackjackPayout; // Return original bet on push
+
+                    await db.run('UPDATE users SET chip_balance = chip_balance + ?, blackjack_game = NULL WHERE user_id = ?', [balanceChange, userId]);
+                    embed.setDescription(resultMessage)
+                         .addFields({ name: 'Dealer\'s Final Hand', value: `${getHandString(dealerHand)} (Value: ${dealerValue})` });
+                }
+                
+                await interaction.editReply({ embeds: [embed] });
+
+            } else if (subcommand === 'hit' || subcommand === 'stand') {
+                if (!gameState) {
+                    return interaction.editReply({ content: 'You do not have a game in progress. Use `/blackjack play` to start one.', ephemeral: true });
+                }
+                
+                // --- Hit Logic ---
+                if (subcommand === 'hit') {
+                    gameState.playerHand.push(gameState.deck.pop());
+                    const playerValue = calculateHandValue(gameState.playerHand);
+
+                    const embed = new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(`Blackjack Game - Bet: ${gameState.bet} chips`)
+                        .addFields(
+                            { name: 'Your Hand', value: `${getHandString(gameState.playerHand)} (Value: ${playerValue})`, inline: true },
+                            { name: 'Dealer\'s Hand', value: `${getHandString([gameState.dealerHand[0]])} (Showing)`, inline: true }
+                        );
+
+                    if (playerValue > 21) {
+                        // Player busts, game over
+                        await db.run('UPDATE users SET blackjack_game = NULL WHERE user_id = ?', [userId]);
+                        embed.setDescription(`You busted with ${playerValue}! You lose ${gameState.bet} chips.`)
+                             .setColor(0xFF0000);
                     } else {
-                        resultMessage = "It's a tie!";
-                        winAmount = 0;
+                        // Game continues
+                        await db.run('UPDATE users SET blackjack_game = ? WHERE user_id = ?', [JSON.stringify(gameState), userId]);
+                        embed.setDescription('You hit. Use `/blackjack hit` or `/blackjack stand`.');
                     }
+                    await interaction.editReply({ embeds: [embed] });
+                    return;
                 }
-                return { playerTotal, dealerTotal };
-            };
 
-            playerHand.push(dealCard());
-            playerTotal = calculateTotal(playerHand);
-            if (playerTotal > 21) {
-                gameOver = true;
-                resultMessage = "You busted! Dealer wins.";
-                winAmount = -bet;
-            }
-
-            let { playerTotal: newPlayerTotal, dealerTotal: newDealerTotal } = playRound();
-            playerTotal = newPlayerTotal;
-            dealerTotal = newDealerTotal;
-
-            gameState.playerTotal = playerTotal;
-            gameState.dealerTotal = dealerTotal;
-            gameStates[interaction.user.id] = gameState;
-
-            await interaction.reply({ embeds: [createEmbed("Your turn!", gameState)] });
-
-            if (gameOver) {
-                delete gameStates[interaction.user.id];
-                db.run("UPDATE balances SET balance = balance + ? WHERE user_id = ?", [winAmount, interaction.user.id], function (err) {
-                    if (err) {
-                        console.error("Error updating balance:", err);
-                        return interaction.followUp({ content: 'An error occurred.', ephemeral: true });
+                // --- Stand Logic ---
+                if (subcommand === 'stand') {
+                    let dealerValue = calculateHandValue(gameState.dealerHand);
+                    while (dealerValue < 17) {
+                        gameState.dealerHand.push(gameState.deck.pop());
+                        dealerValue = calculateHandValue(gameState.dealerHand);
                     }
 
-                    db.get("SELECT balance FROM balances WHERE user_id = ?", [interaction.user.id], (err, row) => {
-                        if (err) {
-                            console.error("Error getting balance:", err);
-                            return interaction.followUp({ content: 'An error occurred.', ephemeral: true });
-                        }
-                        const newBalance = row.balance;
-                        const finalEmbed = createEmbed(resultMessage + `\nNew Balance: ${newBalance}`, gameState).setColor(winAmount > 0 ? 0x00FF00 : winAmount < 0 ? 0xFF0000 : 0xFFFF00);
-                        interaction.followUp({ embeds: [finalEmbed] });
-                    });
-                });
-            }
-        } else if (subcommand === 'stay') {
-            const gameState = gameStates[interaction.user.id];
-            if (!gameState || gameState.gameOver) {
-                return interaction.reply({ content: "No game in progress or game over!", ephemeral: true });
-            }
+                    const playerValue = calculateHandValue(gameState.playerHand);
+                    let resultMessage = '';
+                    let balanceChange = 0;
 
-            let { playerHand, dealerHand, playerTotal, dealerTotal, gameOver, winAmount, bet } = gameState;
-
-            const playRound = () => {
-                let playerTotal = calculateTotal(playerHand);
-                let dealerTotal = calculateTotal(dealerHand);
-
-                if (playerTotal > 21) {
-                    gameOver = true;
-                    resultMessage = "You busted! Dealer wins.";
-                    winAmount = -bet;
-                } else if (dealerTotal > 21) {
-                    gameOver = true;
-                    resultMessage = "Dealer busted! You win!";
-                    winAmount = bet;
-                } else if (gameOver) {
-                    if (playerTotal > dealerTotal) {
-                        resultMessage = "You win!";
-                        winAmount = bet;
-                    } else if (playerTotal < dealerTotal) {
-                        resultMessage = "Dealer wins!";
-                        winAmount = -bet;
+                    if (dealerValue > 21) {
+                        resultMessage = `Dealer busts with ${dealerValue}! You win!`;
+                        balanceChange = gameState.bet * 2; // Bet back + winnings
+                    } else if (playerValue > dealerValue) {
+                        resultMessage = `You win with ${playerValue} against the dealer's ${dealerValue}!`;
+                        balanceChange = gameState.bet * 2;
+                    } else if (dealerValue > playerValue) {
+                        resultMessage = `Dealer wins with ${dealerValue} against your ${playerValue}.`;
+                        balanceChange = 0; // Bet already deducted
                     } else {
-                        resultMessage = "It's a tie!";
-                        winAmount = 0;
+                        resultMessage = `Push! You and the dealer tie with ${playerValue}.`;
+                        balanceChange = gameState.bet; // Return original bet
                     }
-                }
-                return { playerTotal, dealerTotal };
-            };
 
-            playerTotal = calculateTotal(playerHand);
-            dealerTotal = calculateTotal(dealerHand);
+                    await db.run('UPDATE users SET chip_balance = chip_balance + ?, blackjack_game = NULL WHERE user_id = ?', [balanceChange, userId]);
 
-            while (dealerTotal < 17) {
-                dealerHand.push(dealCard());
-                dealerTotal = calculateTotal(dealerHand);
-            }
-
-            gameOver = true;
-            let resultMessage = "";
-
-            let { playerTotal: newPlayerTotal, dealerTotal: newDealerTotal } = playRound(); // Get returned totals
-            playerTotal = newPlayerTotal; // Update playerTotal
-            dealerTotal = newDealerTotal; // Update dealerTotal
-
-            gameState.playerTotal = playerTotal;  // Update gameState
-            gameState.dealerTotal = dealerTotal;  // Update gameState
-            gameStates[interaction.user.id] = gameState; // Update the gameStates
-
-            if (!resultMessage) { //If not busted by hit
-                if (playerTotal > dealerTotal) {
-                    resultMessage = "You win!";
-                    winAmount = bet;
-                } else if (playerTotal < dealerTotal) {
-                    resultMessage = "Dealer wins!";
-                    winAmount = -bet;
-                } else {
-                    resultMessage = "It's a tie!";
-                    winAmount = 0;
+                    const embed = new EmbedBuilder()
+                        .setColor(balanceChange > gameState.bet ? 0x00FF00 : balanceChange === gameState.bet ? 0xFFFF00 : 0xFF0000)
+                        .setTitle(`Blackjack Game Over - Bet: ${gameState.bet} chips`)
+                        .setDescription(resultMessage)
+                        .addFields(
+                            { name: 'Your Final Hand', value: `${getHandString(gameState.playerHand)} (Value: ${playerValue})`, inline: true },
+                            { name: 'Dealer\'s Final Hand', value: `${getHandString(gameState.dealerHand)} (Value: ${dealerValue})`, inline: true }
+                        );
+                    await interaction.editReply({ embeds: [embed] });
                 }
             }
-
-            await interaction.reply({ embeds: [createEmbed(resultMessage, gameState)] }); // Pass gameState
-
-            delete gameStates[interaction.user.id];
-
-            db.run("UPDATE balances SET balance = balance + ? WHERE user_id = ?", [winAmount, interaction.user.id], function (err) {
-                if (err) {
-                    console.error("Error updating balance:", err);
-                    return interaction.followUp({ content: 'An error occurred.', ephemeral: true });
-                }
-
-                db.get("SELECT balance FROM balances WHERE user_id = ?", [interaction.user.id], (err, row) => {
-                    if (err) {
-                        console.error("Error getting balance:", err);
-                        return interaction.followUp({ content: 'An error occurred.', ephemeral: true });
-                    }
-                    const newBalance = row.balance;
-                    const finalEmbed = createEmbed(resultMessage + `\nNew Balance: ${newBalance}`, gameState).setColor(winAmount > 0 ? 0x00FF00 : winAmount < 0 ? 0xFF0000 : 0xFFFF00);
-                    interaction.followUp({ embeds: [finalEmbed] });
-                });
-            });
+        } catch (error) {
+            console.error("Error in /blackjack command:", error);
+            await interaction.editReply({ content: 'An error occurred.', ephemeral: true });
+        } finally {
+            if (db) await db.close();
         }
     },
 };
