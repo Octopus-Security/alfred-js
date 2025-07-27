@@ -1,37 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../balances.db');
-
-// Helper function to wrap db.get in a promise
-function dbGet(query, params) {
-    return new Promise((resolve, reject) => {
-        db.get(query, params, (err, row) => {
-            if (err) reject(err);
-            else resolve(row);
-        });
-    });
-}
-
-// Helper function to wrap db.all in a promise
-function dbAll(query, params) {
-    return new Promise((resolve, reject) => {
-        db.all(query, params, (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-        });
-    });
-}
-
-// Helper function to wrap db.run in a promise
-function dbRun(query, params) {
-    return new Promise((resolve, reject) => {
-        db.run(query, params, function(err) {
-            if (err) reject(err);
-            else resolve(this);
-        });
-    });
-}
-
+const { open } = require('sqlite');
+const sqlite3 = require('sqlite3');
+const path = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -40,33 +10,38 @@ module.exports = {
         .addUserOption(option =>
             option.setName('user')
             .setDescription('The user whose portfolio to view.')
-            .setRequired(false)), // Optional, defaults to yourself
+            .setRequired(false)),
 
     async execute(interaction) {
-        // Defer the reply immediately!
         await interaction.deferReply();
 
         const targetUser = interaction.options.getUser('user') || interaction.user;
         const userId = targetUser.id;
 
+        let db;
         try {
+            // Open a new connection to the database for this command execution
+            db = await open({
+                filename: path.join(__dirname, '../balances.db'), // Correct path to the database
+                driver: sqlite3.Database
+            });
+
             // Get user's USD and Chip balance
-            let userRow = await dbGet(`SELECT * FROM users WHERE user_id = ?`, [userId]);
+            let userRow = await db.get(`SELECT * FROM users WHERE user_id = ?`, [userId]);
 
             // If user doesn't exist, create them
             if (!userRow) {
-                await dbRun('INSERT INTO users (user_id) VALUES (?)', [userId]);
-                userRow = { usd_balance: 100.0, chip_balance: 0 }; // Use default values for the embed
+                await db.run('INSERT INTO users (user_id) VALUES (?)', [userId]);
+                userRow = await db.get(`SELECT * FROM users WHERE user_id = ?`, [userId]);
             }
 
             // Get all their owned stocks/crypto
-            const query = `
+            const assetRows = await db.all(`
                 SELECT p.amount, a.ticker, a.type
                 FROM portfolios p
                 JOIN assets a ON p.asset_id = a.asset_id
                 WHERE p.user_id = ? AND p.amount > 0
-            `;
-            const assetRows = await dbAll(query, [userId]);
+            `, [userId]);
 
             const embed = new EmbedBuilder()
                 .setTitle(`${targetUser.username}'s Portfolio`)
@@ -100,13 +75,16 @@ module.exports = {
                 embed.addFields({ name: 'Assets', value: 'No stocks or crypto held.' });
             }
             
-            // Send the final result using editReply
             await interaction.editReply({ embeds: [embed] });
 
         } catch (error) {
             console.error("Error in /portfolio command:", error);
-            // Use editReply for errors as well
             await interaction.editReply({ content: 'An error occurred while fetching the portfolio.', ephemeral: true });
+        } finally {
+            // Ensure the database connection is closed
+            if (db) {
+                await db.close();
+            }
         }
     },
 };
