@@ -3,18 +3,14 @@ Alfred rewritten in JS with the help of google gemini
 
 I used google gemini to convert the python bot to node js and to help integrate /commands
 
-To use it make a config.json in the main directory and include the following:
+To use it make a .env file in the root directory
 
-{
-  "token": "",
-  "clientId": ""
-}
+Make the contents as follows but replace (KEY) with the correct values
 
-where token is equal to your bot token and clientId to your client id
+DISCORD_TOKEN=(KEY)
+CLIENT_ID=(KEY)
+FINNHUB_API_KEY=(KEY)
 
-I use a node module called pm2 to run the bot on a vps
+where token is equal to your bot token and clientId to your client id and finnhub api key is your key from finnhub which you'll need to generate on their site
 
-TODO:
-
--check roulette logic, change the multiplier to 10x if you hit green
--add a CVE search command probably using exploitdb
+I use a docker container to run the bot on a vps
