@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
 
+require('dotenv').config(); 
+const fs = require('node:fs');
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Load commands
