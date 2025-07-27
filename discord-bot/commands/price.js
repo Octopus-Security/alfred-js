@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
-require('dotenv').config({ path: '../../.env' }); // Adjust path to find .env in the root
 
 module.exports = {
     data: new SlashCommandBuilder()
