@@ -1,0 +1,7 @@
+services:
+  discord-bot:
+    build: .
+    container_name: alfred_js_bot
+    restart: always
+    volumes:
+      - ./balances.db:/app/balances.db
