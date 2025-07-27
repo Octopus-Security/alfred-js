@@ -3,5 +3,9 @@ services:
     build: .
     container_name: alfred_js_bot
     restart: always
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+      - FINNHUB_API_KEY=${FINNHUB_API_KEY}
     volumes:
       - ./balances.db:/app/balances.db

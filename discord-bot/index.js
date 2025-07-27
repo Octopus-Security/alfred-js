@@ -2,9 +2,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 
-// Load environment variables from the .env file in the project root
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
-
 // Use the token from your .env file
 const token = process.env.DISCORD_TOKEN;
 
