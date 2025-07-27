@@ -17,6 +17,4 @@ I use a node module called pm2 to run the bot on a vps
 TODO:
 
 -check roulette logic, change the multiplier to 10x if you hit green
--if you can code a blackjack command yourself without using Gemini you earn a cookie
 -add a CVE search command probably using exploitdb
--actually learn JavaScript 
