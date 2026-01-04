@@ -4,11 +4,13 @@ services:
     container_name: alfred_js_bot
     restart: always
     
-    # This ONE line loads DISCORD_TOKEN, CLIENT_ID, FINNHUB_API_KEY, 
-    # and anything else inside that file.
-    env_file:
-      - /home/psychopathy/alfred-js/.env
+    # REMOVE THIS SECTION COMPLETELY
+    # env_file:
+    #   - /home/psychopathy/alfred-js/.env
 
     volumes:
-      # Use absolute path to keep your user balances safe
+      # This is the line that actually does the magic.
+      # It takes the file from your server and puts it inside the container
+      # so the bot can read it on startup.
+      - /home/psychopathy/alfred-js/.env:/app/.env
       - /home/psychopathy/alfred-js/balances.db:/app/balances.db
