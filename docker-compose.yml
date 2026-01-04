@@ -3,8 +3,16 @@ services:
     build: .
     container_name: alfred_js_bot
     restart: always
-    working_dir: /app  # <--- Ensures the bot looks in /app for the .env file
+    working_dir: /app
+
+    # Explicitly list the variables we need. 
+    # We leave the values empty here so Docker knows to look for them 
+    # in the Portainer configuration.
+    environment:
+      - DISCORD_TOKEN
+      - CLIENT_ID
+      - FINNHUB_API_KEY
 
     volumes:
-      - /home/psychopathy/alfred-js/.env:/app/.env
+      # ONLY mount the database. No more .env file.
       - /home/psychopathy/alfred-js/balances.db:/app/balances.db
