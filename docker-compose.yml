@@ -3,9 +3,12 @@ services:
     build: .
     container_name: alfred_js_bot
     restart: always
-    environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - CLIENT_ID=${CLIENT_ID}
-      - FINNHUB_API_KEY=${FINNHUB_API_KEY}
+    
+    # This ONE line loads DISCORD_TOKEN, CLIENT_ID, FINNHUB_API_KEY, 
+    # and anything else inside that file.
+    env_file:
+      - /home/psychopathy/alfred-js/.env
+
     volumes:
-      - ./balances.db:/app/balances.db
+      # Use absolute path to keep your user balances safe
+      - /home/psychopathy/alfred-js/balances.db:/app/balances.db
