@@ -4,15 +4,19 @@ services:
     container_name: alfred_js_bot
     restart: always
     working_dir: /app
-
-    # Explicitly list the variables we need. 
-    # We leave the values empty here so Docker knows to look for them 
-    # in the Portainer configuration.
+    
+    # 1. Environment Variables (Empty here, filled in Portainer)
     environment:
       - DISCORD_TOKEN
       - CLIENT_ID
       - FINNHUB_API_KEY
 
     volumes:
-      # ONLY mount the database. No more .env file.
       - /home/psychopathy/alfred-js/balances.db:/app/balances.db
+
+# 2. ADD THIS SECTION AT THE BOTTOM
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1400"
