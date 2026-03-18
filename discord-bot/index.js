@@ -38,8 +38,4 @@ for (const file of eventFiles) {
 }
 
 // --- Login to Discord ---
-// Debug log to confirm the token is being read
-console.log('--- Attempting to log in with token: ---');
-console.log(token);
-
 client.login(token);
