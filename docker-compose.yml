@@ -11,6 +11,7 @@ services:
       - CLIENT_ID
       - FINNHUB_API_KEY
       - CAT_API_KEY
+      - ALFRED_ADMIN
 
     volumes:
       - /home/psychopathy/alfred-js/balances.db:/app/balances.db
