@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
-const ADMIN_USER_ID = process.env.ADMIN_USER_ID;
+const ADMIN_USER_ID = process.env.ALFRED_ADMIN;
 
 module.exports = {
     data: new SlashCommandBuilder()
