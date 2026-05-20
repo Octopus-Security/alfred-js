@@ -8,10 +8,19 @@
   },
   "dependencies": {
     "3": "^2.1.0",
-    "axios": "^1.11.0",
-    "discord.js": "^14.18.0",
+    "axios": "^1.16.1",
+    "discord.js": "^14.26.4",
     "node-fetch": "^3.3.2",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
+  },
+  "overrides": {
+    "brace-expansion": "^5.0.6",
+    "ip-address": "^10.2.0",
+    "lodash": "^4.18.1",
+    "minimatch": "^10.2.5",
+    "socks": "^2.8.9",
+    "tar-fs": "^2.1.4",
+    "undici": "^6.25.0"
   }
 }
