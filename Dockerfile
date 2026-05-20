@@ -7,8 +7,9 @@ WORKDIR /app
 # Copy package.json from the project root (this is the corrected line)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies — build sqlite3 from source so its native binary
+# links against this image's glibc (prebuilt binaries require glibc 2.38+)
+RUN npm install --build-from-source=sqlite3
 
 # Copy the rest of the bot's code from the discord-bot subdirectory
 COPY discord-bot/. .
