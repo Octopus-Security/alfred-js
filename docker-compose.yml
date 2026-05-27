@@ -12,13 +12,19 @@ services:
       - FINNHUB_API_KEY
       - CAT_API_KEY
       - ALFRED_ADMIN
+      - OCTOPUS_AI_URL=http://octopus-ai:4000
+      - AI_CHANNEL_NAME=octopus-ai
 
     volumes:
       - /home/psychopathy/alfred-js/balances.db:/app/balances.db
+    networks:
+      - default
+      - octopus_network
 
-# 2. ADD THIS SECTION AT THE BOTTOM
 networks:
   default:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: "1400"
+  octopus_network:
+    external: true
