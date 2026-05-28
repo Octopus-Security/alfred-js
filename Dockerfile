@@ -1,5 +1,8 @@
 # Use an official Node.js runtime as a parent image
-FROM node:20
+FROM node:22
+
+# Patch Debian OS packages (bookworm) before anything else
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
 WORKDIR /app
