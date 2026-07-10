@@ -7,7 +7,7 @@ services:
     
     # 1. Environment Variables (Empty here, filled in Portainer)
     environment:
-      - DISCORD_TOKEN
+      - ALFRED_DISCORD_TOKEN
       - CLIENT_ID
       - FINNHUB_API_KEY
       - CAT_API_KEY

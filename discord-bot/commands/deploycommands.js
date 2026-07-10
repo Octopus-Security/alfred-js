@@ -24,7 +24,7 @@ module.exports = {
             if (cmd.data) commands.push(cmd.data.toJSON());
         }
 
-        const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+        const rest = new REST({ version: '10' }).setToken(process.env.ALFRED_DISCORD_TOKEN);
 
         try {
             await rest.put(

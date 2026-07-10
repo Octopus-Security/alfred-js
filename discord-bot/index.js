@@ -3,7 +3,7 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 
 // Use the token from your .env file
-const token = process.env.DISCORD_TOKEN;
+const token = process.env.ALFRED_DISCORD_TOKEN;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });

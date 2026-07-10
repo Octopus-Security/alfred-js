@@ -7,7 +7,7 @@ To use it make a .env file in the root directory
 
 Make the contents as follows but replace (KEY) with the correct values
 
-DISCORD_TOKEN=(KEY)
+ALFRED_DISCORD_TOKEN=(KEY)
 CLIENT_ID=(KEY)
 FINNHUB_API_KEY=(KEY)
 
