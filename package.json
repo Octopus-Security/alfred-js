@@ -4,7 +4,8 @@
   "description": "A general purpose discord bot. You shall call me snowball as my fur is pretty and white",
   "main": "index.js",
   "scripts": {
-    "start": "node discord-bot/index.js"
+    "start": "node discord-bot/index.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "3": "^2.1.0",
