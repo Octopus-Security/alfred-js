@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { BUILD, STARTED_AT } = require('./build');
 
 // Use the token from your .env file
 const token = process.env.ALFRED_DISCORD_TOKEN;
@@ -36,6 +37,15 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
+
+// Deploy verification. There is no endpoint to serve this from — see build.js
+// — so it goes where this container is actually observed:
+//
+//     docker logs alfred_js_bot | grep '[alfred] build'
+//
+// Printed BEFORE login, so it is there even when the token is the thing that is
+// wrong and the bot never reaches ready.
+console.log(`[alfred] build ${BUILD} started ${STARTED_AT}`);
 
 // --- Login to Discord ---
 client.login(token);
