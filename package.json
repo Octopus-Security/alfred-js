@@ -8,7 +8,6 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "3": "^2.1.0",
     "axios": "^1.18.0",
     "discord.js": "^14.26.4",
     "node-fetch": "^3.3.2",
