@@ -21,6 +21,7 @@ module.exports = {
                 filename: path.join(__dirname, '../balances.db'),
                 driver: sqlite3.Database
             });
+            await db.run('PRAGMA busy_timeout = 5000'); // wait for a competing writer instead of failing with SQLITE_BUSY (balances.db is a single-file mount, so no WAL)
 
             // Get user from the NEW 'users' table
             let user = await db.get('SELECT * FROM users WHERE user_id = ?', [userId]);
